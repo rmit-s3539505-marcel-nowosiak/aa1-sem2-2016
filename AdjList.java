@@ -43,8 +43,6 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     } 
     // end of addVertex()
 	
-    
-    
     public void addEdge(T srcLabel, T tarLabel) {
     	
         for(int x=0; x<verts.length; x++){
@@ -53,7 +51,13 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
         		for(int y=0; y<verts.length; y++){
         			if(verts[y].getName().matches((String)tarLabel)){
         				verts[x].addNode((String)tarLabel);
-        				System.out.println("successfully added");
+        				
+        					if(((String)tarLabel).matches((String) srcLabel)){
+        						break;
+        					}
+        					else{
+        						verts[y].addNode((String)srcLabel);
+        					}
         			}
         		}
         	}
@@ -76,7 +80,24 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 	
     
     public void removeEdge(T srcLabel, T tarLabel) {
-        // Implement me!
+    	
+        for(int x=0; x<verts.length; x++){
+        	if(verts[x].getName().equals((String)srcLabel)){
+    
+        		for(int y=0; y<verts.length; y++){
+        			if(verts[y].getName().matches((String)tarLabel)){
+        				verts[x].removeNode((String) tarLabel);
+        				
+        					if(((String)tarLabel).matches((String) srcLabel)){
+        						break;
+        					}
+        					else{
+        						verts[y].removeNode((String)srcLabel);
+        					}
+        			}
+        		}
+        	}
+        }
     } // end of removeEdges()
 	
     
@@ -93,7 +114,10 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 	
     
     public void printEdges(PrintWriter os) {
-       os.println(verts[0].getHead().getLabel());
+    	for(int x=0;x<verts.length;x++){
+    		
+    		verts[x].printNodes(os);
+    	}
     } // end of printEdges()
     
     
@@ -105,26 +129,3 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     } // end of shortestPathDistance()
     
 } // end of class AdjList
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
