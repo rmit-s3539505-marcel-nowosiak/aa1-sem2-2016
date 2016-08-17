@@ -24,22 +24,37 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     } // end of AdjList()
 	
 	// START FUNCTIONS
+    
+    private boolean searchVert(String vertLabel){
+    	for(int x=0; x<verts.length; x++){
+    		if(verts[x].getName().matches(vertLabel)){
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
     public void addVertex(T vertLabel) {
 		vertCount++;
 		LinkedList[] tempList = new LinkedList[vertCount];
 		LinkedList newVert = new LinkedList((String)vertLabel);
 		
+		
 		if(verts.length==0){
 			tempList[0] = newVert;
+			verts = tempList;
 		}
 		
-		else{
+		else if(searchVert((String)vertLabel) == true){
 			for(int x=0; x<verts.length; x++){
 					tempList[x] = verts[x];
 			}
 			tempList[verts.length] = newVert;
+			verts = tempList;
 		}
-	verts = tempList;
+		else{
+			System.out.println("Vert already exists");
+		}
     } 
     // end of addVertex()
 	
@@ -75,7 +90,11 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     
     public void removeVertex(T vertLabel) {
-        // Implement me!
+//        for(int x=0; x<verts.length; x++){
+//        	if(verts[x].getName().matches((String)vertLabel){
+//        		
+//        	}
+//        }
     } // end of removeVertex()
 	
     
@@ -103,7 +122,7 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     public void printVertices(PrintWriter os) {
     	if(verts.length != 0){
-    		for(int x=0; x<vertCount; x++){
+    		for(int x=0; x<verts.length; x++){
         	os.println("Vertice "+(x+1)+" "+verts[x].getName());
     		}
     	}
@@ -115,7 +134,6 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     public void printEdges(PrintWriter os) {
     	for(int x=0;x<verts.length;x++){
-    		
     		verts[x].printNodes(os);
     	}
     } // end of printEdges()
