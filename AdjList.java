@@ -94,10 +94,7 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     
     
-    
-    
-    
-    
+
     //Need to clean this up pretty badly, but it'll do for now
     public void removeVertex(T vertLabel) {
     	LinkedList[] newList = new LinkedList[vertCount-1];
@@ -105,13 +102,19 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     	
     	for(int x=0; x<vertCount; x++){
     		if(verts[x].getName().matches((String) vertLabel)){
-
+    			
     			temp=verts[x];
     			verts[x] = verts[vertCount-1];
     			verts[vertCount-1] = temp;
     			
+//    			for(x=0;x<vertCount;x++){
+//    				removeEdge();
+//    			}
     			
     			for(x=0;x<vertCount-1;x++){
+    				if(verts[x].searchNode((String)vertLabel)==true){
+    					verts[x].removeNode(temp.getName());
+    				}
     				newList[x]=verts[x];
     			}
     			verts = newList;
@@ -119,17 +122,6 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     		}
     	}
     } // end of removeVertex()
-	
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     public void removeEdge(T srcLabel, T tarLabel) {
     	

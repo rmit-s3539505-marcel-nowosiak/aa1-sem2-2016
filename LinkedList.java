@@ -27,6 +27,18 @@ public class LinkedList{
 		}
 		size++;
 	}
+
+	public boolean searchNode(String label){
+		Node currNode = head;
+		for(int x=0; x<size; x++){
+			if(currNode.getLabel().matches(label)){
+				return true;
+			}
+			currNode = currNode.getNext();
+		}
+		return false;
+	}
+	
 	
 	public boolean removeNode(String label){
 		Node currNode = head;
