@@ -80,10 +80,18 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     } // end of addEdge()
 	
 
+    //prints backwards, tried to sort out a workaround by grabbing tail and making
+    //a pointer that points <- (in THAT direction) but it shit itself im going to bed
+    //fuck coding.
     public ArrayList<T> neighbours(T vertLabel) {
         ArrayList<T> neighbours = new ArrayList<T>();
-        
-        // Implement me!
+ 
+        for(int x=0; x<verts.length; x++){
+        	if(verts[x].getName().equals((String)vertLabel))
+        	{
+        		verts[x].printNodes();
+        	}
+        }
         
         return neighbours;
     } // end of neighbours()
