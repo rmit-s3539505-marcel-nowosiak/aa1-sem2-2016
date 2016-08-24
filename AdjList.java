@@ -172,10 +172,35 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
-    	// Implement me!
+    	
+    	boolean[] visited = new boolean[verts.length];
+    	Queue<T> s = new java.util.LinkedList<T>();
+    	
+    	s.add(vertLabel1);
+    	
+		while (s.isEmpty() == false) {
+			T n = s.poll();
+			System.out.print(" " + n);
+			visited[(int) n] = true;
+			Node head = array[n].head;
+			while (head != null) {
+				if (visited[head.dest] == false) {
+					s.add(head.dest);
+					visited[head.dest] = true;
+				}
+				head = head.next;
+			}
+		}
+    	
+    	/*for(int x=0; x<verts.length; x++){
+        	if(verts[x].getName().equals((String)vertLabel1)){
+        		if(verts[x].
+        			
+        		}
+        	}*/
     	
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
     } // end of shortestPathDistance()
-    
+        
 } // end of class AdjList
