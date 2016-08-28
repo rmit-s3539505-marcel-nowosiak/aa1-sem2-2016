@@ -182,7 +182,7 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 			T n = s.poll();
 			System.out.print(" " + n);
 			visited[(int) n] = true;
-			Node head = array[n].head;
+			Node head = verts[(int) n].head;
 			while (head != null) {
 				if (visited[head.dest] == false) {
 					s.add(head.dest);
