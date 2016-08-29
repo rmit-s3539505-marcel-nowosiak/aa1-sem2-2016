@@ -17,14 +17,20 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 	private LinkedList[] verts;
 	private int vertCount;
 	
-    //Contructs empty graph.	
+    // Constructs empty graph.	
     public AdjList() {
     	vertCount = 0;
 		verts = new LinkedList[vertCount];
     } // end of AdjList()
 	
-	// START FUNCTIONS
+	
     
+    //------------------------------------------------------------
+    //-----------------ADJACENCY FUNCTIONS------------------------
+    //------------------------------------------------------------
+
+    //------------------------------------------------------------
+    // Finds vertex
     private boolean searchVert(String vertLabel){
     	for(int x=0; x<verts.length; x++){
     		if(verts[x].getName().matches(vertLabel)){
@@ -33,7 +39,12 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     	}
     	return false;
     }
+    //------------------------------------------------------------
     
+    
+    
+    //------------------------------------------------------------
+    // Adds vertex to adjacency list
     public void addVertex(T vertLabel) {
 		vertCount++;
 		LinkedList[] tempList = new LinkedList[vertCount];
@@ -54,10 +65,16 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 		}
 		else{
 			System.out.println("Vert already exists");
-		}
+	}
     } 
     // end of addVertex()
-	
+    //------------------------------------------------------------
+    
+    
+    
+    
+    //------------------------------------------------------------
+    // Links two vertices
     public void addEdge(T srcLabel, T tarLabel) {
     	
         for(int x=0; x<verts.length; x++){
@@ -72,15 +89,14 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
         					}
         					else{
         						verts[y].addNode((String)srcLabel);
-        					}
-        			}
-        		}
-        	}
-        }
+    }}}}}
     } // end of addEdge()
-	
-
-    //prints neighbours correctly
+    //------------------------------------------------------------
+    
+    
+    
+    //------------------------------------------------------------
+    // Prints all neighbors of requested vertex
    public ArrayList<T> neighbours(T vertLabel) {
         ArrayList<T> neighbours = new ArrayList<T>();
  
@@ -91,18 +107,15 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 				verts[x].printNodes(os);
         	}
         }
-        
-        return neighbours;
+          return neighbours;
     } // end of neighbours()
-    
-    
-    
-    
+   //------------------------------------------------------------
     
     
     
 
-    //Need to clean this up pretty badly, but it'll do for now
+    //------------------------------------------------------------
+    // Removes vertex from adjacency list
     public void removeVertex(T vertLabel) {
     	LinkedList[] newList = new LinkedList[vertCount-1];
     	LinkedList temp;
@@ -114,10 +127,6 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     			verts[x] = verts[vertCount-1];
     			verts[vertCount-1] = temp;
     			
-//    			for(x=0;x<vertCount;x++){
-//    				removeEdge();
-//    			}
-    			
     			for(x=0;x<vertCount-1;x++){
     				if(verts[x].searchNode((String)vertLabel)==true){
     					verts[x].removeNode(temp.getName());
@@ -126,10 +135,16 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     			}
     			verts = newList;
     			vertCount--;
-    		}
-    	}
+    }}
     } // end of removeVertex()
+    //------------------------------------------------------------
     
+    
+    
+    
+    
+    //------------------------------------------------------------
+    // Removes a requested link between two vertices
     public void removeEdge(T srcLabel, T tarLabel) {
     	
         for(int x=0; x<verts.length; x++){
@@ -144,14 +159,15 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
         					}
         					else{
         						verts[y].removeNode((String)srcLabel);
-        					}
-        			}
-        		}
-        	}
-        }
+    }}}}}
     } // end of removeEdges()
-	
+    //------------------------------------------------------------
     
+    
+    
+    
+    //------------------------------------------------------------
+    // Prints a list of all vertices
     public void printVertices(PrintWriter os) {
     	if(verts.length != 0){
     		for(int x=0; x<verts.length; x++){
@@ -162,18 +178,30 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     		os.println("No vertices to print.");
     	}
     } // end of printVertices()
-	
+    //------------------------------------------------------------
     
+    
+    
+    
+	
+    //------------------------------------------------------------
+    // Prints all edges for all vertices
     public void printEdges(PrintWriter os) {
     	for(int x=0;x<verts.length;x++){
     		verts[x].printNodes(os);
     	}
     } // end of printEdges()
+    //------------------------------------------------------------
     
     
+    
+    
+    //------------------------------------------------------------
+    // Calculation of shortestPathDistance
+    // **currently not working**
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
     	
-    	boolean[] visited = new boolean[verts.length];
+    	/*boolean[] visited = new boolean[verts.length];
     	Queue<T> s = new java.util.LinkedList<T>();
     	
     	s.add(vertLabel1);
@@ -192,15 +220,10 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
 			}
 		}
     	
-    	/*for(int x=0; x<verts.length; x++){
-        	if(verts[x].getName().equals((String)vertLabel1)){
-        		if(verts[x].
-        			
-        		}
-        	}*/
-    	
-        // if we reach this point, source and target are disconnected
+        // if we reach this point, source and target are disconnected*/
         return disconnectedDist;    	
     } // end of shortestPathDistance()
+    //------------------------------------------------------------
         
+    
 } // end of class AdjList
