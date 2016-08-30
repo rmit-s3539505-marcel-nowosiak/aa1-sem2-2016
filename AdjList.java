@@ -41,6 +41,15 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     }
     //------------------------------------------------------------
     
+    private int getIndex(T vertLabel){
+    	for(int x=0; x<verts.length; x++){
+    		if(verts[x].getName().matches((String)vertLabel)){
+    			return x;
+    		}
+    	}
+    	return -1;
+    }
+    
     
     
     //------------------------------------------------------------
@@ -97,14 +106,17 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     //------------------------------------------------------------
     // Prints all neighbors of requested vertex
+   @SuppressWarnings("unchecked")
    public ArrayList<T> neighbours(T vertLabel) {
         ArrayList<T> neighbours = new ArrayList<T>();
  
         for(int x=0; x<verts.length; x++){
-        	if(verts[x].getName().equals((String)vertLabel))
-        	{
-				PrintWriter os = new PrintWriter(System.out, true);
-				verts[x].printNodes(os);
+        	if(verts[x].getName().equals((String)vertLabel)){
+        		Node currNode = verts[x].getHead();
+        		while(currNode != null){
+        			neighbours.add((T)currNode.getLabel());
+        			currNode = currNode.getNext();
+        		}
         	}
         }
           return neighbours;
@@ -171,8 +183,9 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     public void printVertices(PrintWriter os) {
     	if(verts.length != 0){
     		for(int x=0; x<verts.length; x++){
-        	os.println("Vertice "+(x+1)+" "+verts[x].getName());
+        	os.print(verts[x].getName()+" ");
     		}
+    		os.println();
     	}
     	else{
     		os.println("No vertices to print.");
@@ -187,8 +200,18 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     //------------------------------------------------------------
     // Prints all edges for all vertices
     public void printEdges(PrintWriter os) {
-    	for(int x=0;x<verts.length;x++){
-    		verts[x].printNodes(os);
+    	if(verts.length != 0){
+    	Node currNode;
+	    	for(int x=0; x<verts.length; x++){
+	
+	    		currNode = verts[x].getHead();
+	    		os.print(verts[x].getName());
+	    		while(currNode != null){
+	    			os.print(" "+currNode.getLabel());
+	    			currNode = currNode.getNext();
+	    		}
+	    		os.println();
+	    	}
     	}
     } // end of printEdges()
     //------------------------------------------------------------
@@ -198,27 +221,32 @@ public class AdjList <T extends Object> implements FriendshipGraph<T>
     
     //------------------------------------------------------------
     // Calculation of shortestPathDistance
-    // **currently not working**
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
-    	
-    	/*boolean[] visited = new boolean[verts.length];
-    	Queue<T> s = new java.util.LinkedList<T>();
-    	
-    	s.add(vertLabel1);
-    	
-		while (s.isEmpty() == false) {
-			T n = s.poll();
-			System.out.print(" " + n);
-			visited[(int) n] = true;
-			Node head = verts[(int) n].head;
-			while (head != null) {
-				if (visited[head.dest] == false) {
-					s.add(head.dest);
-					visited[head.dest] = true;
-				}
-				head = head.next;
-			}
-		}
+    	Stack<T> stack = new Stack<T>();
+    	int count = 0;
+    	boolean[] visited = new boolean[verts.length];
+    	ArrayList<T> n;
+    	int start = getIndex(vertLabel1);
+    	stack.push(vertLabel1);
+    	visited[start] = true;
+	
+    	while(stack.isEmpty() == false){
+    		T element = stack.pop();
+    		n = neighbours(element);
+    		
+    		count++;
+    		
+    		if(n.contains(vertLabel2)){
+    			return count;
+    		}
+
+    		for(int x=0; x<n.size(); x++){
+    			if(visited[getIndex(n.get(x))] == false) {
+    				stack.push(n.get(x));
+    				visited[x] = true;
+    			}
+    		}
+    	}
     	
         // if we reach this point, source and target are disconnected*/
         return disconnectedDist;    	
