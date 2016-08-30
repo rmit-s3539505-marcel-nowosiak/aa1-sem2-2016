@@ -6,6 +6,30 @@ public class LinkedList{
 	private Node tail;
 	private int size;
 	
+	public Node getHead() {
+		return head;
+	}
+
+	public void setHead(Node head) {
+		this.head = head;
+	}
+
+	public Node getTail() {
+		return tail;
+	}
+
+	public void setTail(Node tail) {
+		this.tail = tail;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 	public LinkedList(String n){
 		name = n;
 		head = null;
@@ -85,53 +109,4 @@ public class LinkedList{
 	public String getName(){
 		return name;
 	}
-	
-	public void printNodes(PrintWriter os){
-		Node currNode = head;
-		String s = name+"->";
-		while(currNode != null){
-			s=s+currNode.getLabel()+" ";
-			currNode = currNode.getNext();
-		}
-		os.println(s);
-	}
-	
-	
-	
-public static class Node {
-	private String nlabel;
-	private Node nextNode;
-	private Node prevNode;
-	
-	public Node(String label){
-		nlabel = label;
-		nextNode = null;
-		prevNode = null;
-	}
-	
-	public String getLabel(){
-		return nlabel;
-	}
-	
-	public void setLabel(String s){
-		nlabel = s;
-	}
-	
-	public Node getNext(){
-		return nextNode;
-	}
-	
-	public Node getPrev(){
-		return prevNode;
-	}
-	
-	public void setNext(Node n){
-		nextNode = n;
-	}
-	
-	public void setPrev(Node n){
-		prevNode = n;
-	}
-}
-
 }
