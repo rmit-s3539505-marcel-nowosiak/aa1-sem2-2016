@@ -104,22 +104,28 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         	if(key.matches((String)vertLabel)){
         		int index = (int)e.getValue();
         		
-        		for(int x=index-1; x>0; x--){
-        			for(int y=index-1; y>0; y--){
-        				aM[x][y] = aM[x+1][y+1];
-        			}
-        		}
-        		size--;
-        		aM = updateMatrix(aM);
         		m.remove(key);
         		
-        		//Update each entry in map's key values after one is removed
-        		//If one is removed all those above have their index's shifted down
+//        		for(int x=index-1; x>0; x--){
+//        			for(int y=index-1; y>0; y--){
+//        				aM[x+1][y+1] = aM[x][y];
+//        			}
+//        		}
+    			for(int y=0; y<size; y++){
+    				aM[index][y] = aM[size-1][y];
+    				aM[y][index] = aM[y][size-1];
+    			}			
+ 
+        		m.remove(key);
+        		System.out.println(m);
         		for(Map.Entry<String,Integer> entry : m.entrySet()){
-        			if(entry.getValue() > index){
-        				m.put(entry.getKey(), entry.getValue()-1);
+        			if(entry.getValue() == size-1){
+        				m.put(entry.getKey(), index);
         			}
         		}
+        	//	size--;
+//        		aM = updateMatrix(aM);
+
             	break;
         	}
         }
@@ -171,40 +177,32 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
     //Compute shortest path via Breadth First Search.
     public int shortestPathDistance(T vertLabel1, T vertLabel2) {
-    	Stack<Integer> stack = new Stack<Integer>();
+    	Stack<T> stack = new Stack<T>();
     	int count = 0;
     	boolean[] visited = new boolean[size];
-    	int start = m.get((String)vertLabel1);
-    	int end = m.get((String)vertLabel2);
+    	ArrayList<T> n;
+
     	
-    	visited[start] = true;
-    	
-    	stack.push(start);
-    	
-    	//If targ & src node are the same node, check if connected to self
-   		if(start == end && aM[start][end] == true){
-   			return 1;
+    	stack.push(vertLabel1);
+    	visited[m.get(vertLabel1)] = true;
+
+   		while(stack.isEmpty() == false){
+   			T element = stack.pop();
+	   		n = neighbours(element);
+
+	   		count++;
+	   		
+	   		if(n.contains(vertLabel2)){
+	   			return count;
+	   		}
+	   		
+	   		for(int x = 0; x<n.size(); x++){
+	   			if(visited[m.get(n.get(x))] == false){
+	   				stack.push(n.get(x));
+	   				visited[x] = true;
+	   			}
+	   		}
    		}
-   		
-    	while(stack.isEmpty() == false){
-    		//Get current top element in stack
-    		int element = (int)stack.pop();	
-    			
-    		//If object on top of the stack == end we have reached the destination node
-    		//and can return the current count/distance, & return the number of nodes traveled 
-    		if(element == end && element != start){
-    			return count;
-    		}
-    		count++;
-    		int temp = 0;
-    		while(temp<size){
-    			if(visited[temp] == false && aM[element][temp] == true){
-    				stack.push(temp);
-    				visited[temp] = true;
-    			}
-    			temp++;
-    		}
-    	}
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
     } // end of shortestPathDistance()
