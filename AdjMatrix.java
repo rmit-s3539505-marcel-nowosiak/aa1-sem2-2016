@@ -31,6 +31,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     
 	//Updates the matrix's size after a vertex is removed or added
     private boolean[][] updateMatrix(boolean[][] m){
+		//Have to create a new list to equal the new size
     	boolean[][] newMatrix = new boolean[size][size];
     	for(int x=0; x<size-1; x++){
     		for(int y=0; y<size-1; y++){
@@ -195,7 +196,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	Stack<T> stack = new Stack<T>();
     	int count = 0;
     	boolean[] visited = new boolean[size];
-    	ArrayList<T> n;
+    	ArrayList<T> n, nVerts;
 
     	stack.push(vertLabel1);
     	visited[m.get(vertLabel1)] = true;
@@ -203,21 +204,20 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
    		while(stack.isEmpty() == false){
    			T element = stack.pop();
 	   		n = neighbours(element);
-			System.out.println(n);
-
+			count++;
 	   		for(int x = 0; x<n.size(); x++){
 	   			if(visited[m.get(n.get(x))] == false){
+					nVerts = neighbours(n.get(x));
+					if(nVerts.contains(vertLabel2)){
+						count++;
+						return count;
+					}
 	   				stack.push(n.get(x));
 	   				visited[m.get(n.get(x))] = true;
-
+					
 	   			}
 				
 	   		}
-			if(n.contains(vertLabel2)){
-	   			return count;
-	   		}
-			count++;
-			
    		}
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
