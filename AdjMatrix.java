@@ -57,6 +57,10 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
     
     public void addEdge(T srcLabel, T tarLabel) {
+		if(m.containsKey(srcLabel) == false ||
+			m.containsKey(tarLabel) == false){
+				throw new IllegalArgumentException();
+			}
     	int tar = (int)m.get((String)tarLabel),
     		src = (int)m.get((String)srcLabel);
     	
@@ -83,6 +87,9 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
 
     public ArrayList<T> neighbours(T vertLabel) {
+		if(m.containsKey(vertLabel) == false){
+			throw new IllegalArgumentException();
+		}
         ArrayList<T> neighbours = new ArrayList<T>();
         int vert = m.get((String)vertLabel);
 
@@ -104,26 +111,23 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         	if(key.matches((String)vertLabel)){
         		int index = (int)e.getValue();
         		
-        		m.remove(key);
-        		
-//        		for(int x=index-1; x>0; x--){
-//        			for(int y=index-1; y>0; y--){
-//        				aM[x+1][y+1] = aM[x][y];
-//        			}
-//        		}
+        		//m.remove(key);
+
     			for(int y=0; y<size; y++){
     				aM[index][y] = aM[size-1][y];
     				aM[y][index] = aM[y][size-1];
     			}			
+				
+
  
         		m.remove(key);
-        		System.out.println(m);
+
         		for(Map.Entry<String,Integer> entry : m.entrySet()){
         			if(entry.getValue() == size-1){
         				m.put(entry.getKey(), index);
         			}
         		}
-        	//	size--;
+        		//size--;
 //        		aM = updateMatrix(aM);
 
             	break;
@@ -133,6 +137,10 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
     
     public void removeEdge(T srcLabel, T tarLabel) {
+		if(m.containsKey(srcLabel) == false ||
+			m.containsKey(tarLabel) == false){
+				throw new IllegalArgumentException();
+			}
     	int tar = (int)m.get((String)tarLabel),
     		src = (int)m.get((String)srcLabel);
     	
@@ -157,21 +165,30 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	os.println();
     } // end of printVertices()
 	
+	private boolean isConnected(int index){
+	for(int i = 0; i<size-1; i++){
+		if(aM[index][i] == true){
+			return true;
+		}
+	}
+	return false;
+	}
+	
 	public void printEdges(PrintWriter os) {
 		int x, y;
 		
 		for(Map.Entry<String,Integer> entry: m.entrySet()){
 			x = (int)entry.getValue();
-			os.print(entry.getKey()+" ");
-			
-			for(Map.Entry<String,Integer> entry2: m.entrySet()){
-				y = (int)entry2.getValue();
-				
-				if(aM[x][y] == true && aM[y][x] == true){
-					os.print(entry2.getKey()+" ");
+			if(isConnected(x) == true){
+				for(Map.Entry<String,Integer> entry2: m.entrySet()){
+					y = (int)entry2.getValue();
+					
+					if(aM[x][y] == true && aM[y][x] == true){
+						os.print(entry.getKey()+" ");
+						os.println(entry2.getKey());
+					}
 				}
-			}
-			os.println();
+			}	
 		}
     } // end of printEdges()
     
@@ -182,7 +199,6 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	boolean[] visited = new boolean[size];
     	ArrayList<T> n;
 
-    	
     	stack.push(vertLabel1);
     	visited[m.get(vertLabel1)] = true;
 
@@ -190,8 +206,6 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
    			T element = stack.pop();
 	   		n = neighbours(element);
 
-	   		count++;
-	   		
 	   		if(n.contains(vertLabel2)){
 	   			return count;
 	   		}
@@ -199,9 +213,11 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	   		for(int x = 0; x<n.size(); x++){
 	   			if(visited[m.get(n.get(x))] == false){
 	   				stack.push(n.get(x));
-	   				visited[x] = true;
+	   				visited[m.get(n.get(x))] = true;
 	   			}
+				
 	   		}
+			count++;
    		}
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
