@@ -136,19 +136,24 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
     
     public void removeEdge(T srcLabel, T tarLabel) {
+    		//Check requested verts exist
 		if(m.containsKey(srcLabel) == false ||
 			m.containsKey(tarLabel) == false){
 				throw new IllegalArgumentException();
 			}
+	//get their indexes
     	int tar = (int)m.get((String)tarLabel),
     		src = (int)m.get((String)srcLabel);
     	
+    	//check it's not already disconnected
     	if(aM[src][tar] != false){
     		
+    		//if self connected set to false
 	    	if(srcLabel == tarLabel){
 	    		aM[src][tar] = false;
 	    	}
 	    	else{
+	    		//set coordinates to false
 				aM[src][tar] = false;
 				aM[tar][src] = false;
 	    	}
@@ -175,13 +180,15 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
 	
 	public void printEdges(PrintWriter os) {
 		int x, y;
-		
+		//get the index of first vert
 		for(Map.Entry<String,Integer> entry: m.entrySet()){
 			x = (int)entry.getValue();
+			//if it's connected continue to print its edges
 			if(isConnected(x) == true){
+				//find second, connected vert
 				for(Map.Entry<String,Integer> entry2: m.entrySet()){
 					y = (int)entry2.getValue();
-					
+					//if an edge between two verts is found print dest vert
 					if(aM[x][y] == true && aM[y][x] == true){
 						os.print(entry.getKey()+" ");
 						os.println(entry2.getKey());
@@ -197,21 +204,33 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
     	int count = 0;
     	boolean[] visited = new boolean[size];
     	ArrayList<T> n, nVerts;
-
+	
+	/*Add vertlabel1(starting node) to stack
+	  and mark it as visited*/
     	stack.push(vertLabel1);
     	visited[m.get(vertLabel1)] = true;
 
+		//Continue while an element still exists in stack
    		while(stack.isEmpty() == false){
+   			//get topmost element, and its set of neighbours
    			T element = stack.pop();
 	   		n = neighbours(element);
+	   		//increment moves
 			count++;
+			
+			//iterate through the neighbours and check whether they've been visited or not
 	   		for(int x = 0; x<n.size(); x++){
+	   			//if not get the set of neighbours of each neighbour, and check
+	   			//whether they contain the destination vert
 	   			if(visited[m.get(n.get(x))] == false){
 					nVerts = neighbours(n.get(x));
 					if(nVerts.contains(vertLabel2)){
+						//if so travel one more edge and return total moves
 						count++;
 						return count;
 					}
+					//add each neighbouring element to stack to repeat
+					//this process on until destination is found
 	   				stack.push(n.get(x));
 	   				visited[m.get(n.get(x))] = true;
 					
