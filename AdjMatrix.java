@@ -111,14 +111,12 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         	if(key.matches((String)vertLabel)){
         		int index = (int)e.getValue();
         		
-        		//m.remove(key);
+        		m.remove(key);
 
     			for(int y=0; y<size; y++){
     				aM[index][y] = aM[size-1][y];
     				aM[y][index] = aM[y][size-1];
     			}			
-				
-
  
         		m.remove(key);
 
@@ -127,7 +125,7 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
         				m.put(entry.getKey(), index);
         			}
         		}
-        		//size--;
+        	//	size--;
 //        		aM = updateMatrix(aM);
 
             	break;
@@ -205,19 +203,21 @@ public class AdjMatrix <T extends Object> implements FriendshipGraph<T>
    		while(stack.isEmpty() == false){
    			T element = stack.pop();
 	   		n = neighbours(element);
+			System.out.println(n);
 
-	   		if(n.contains(vertLabel2)){
-	   			return count;
-	   		}
-	   		
 	   		for(int x = 0; x<n.size(); x++){
 	   			if(visited[m.get(n.get(x))] == false){
 	   				stack.push(n.get(x));
 	   				visited[m.get(n.get(x))] = true;
+
 	   			}
 				
 	   		}
+			if(n.contains(vertLabel2)){
+	   			return count;
+	   		}
 			count++;
+			
    		}
         // if we reach this point, source and target are disconnected
         return disconnectedDist;    	
