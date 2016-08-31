@@ -6,6 +6,13 @@ public class LinkedList{
 	private Node tail;
 	private int size;
 	
+	public LinkedList(String n){
+		name = n;
+		head = null;
+		tail = null;
+		size = 0;
+	}
+
 	public Node getHead() {
 		return head;
 	}
@@ -30,13 +37,6 @@ public class LinkedList{
 		this.size = size;
 	}
 
-	public LinkedList(String n){
-		name = n;
-		head = null;
-		tail = null;
-		size = 0;
-	}
-	
 	public void addNode(String label){
 		Node newNode = new Node(label);
 		
